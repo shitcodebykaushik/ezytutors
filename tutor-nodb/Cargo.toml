@@ -12,3 +12,8 @@ actix-rt ="*"
 name = "basic-server"
 [[bin]]
 name = "tutor-service"
+ # Data serilization libaray 
+ serde = {version = "*",features = ["derive"]}
+
+ # Other utilities
+ chrono = {version = "*",features =["serde"]}
