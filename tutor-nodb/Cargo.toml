@@ -6,14 +6,13 @@ default-run = "tutor-service"
 [dependencies]
 actix-web ="*"
 actix-rt ="*"
-
-
-[[bin]]
-name = "basic-server"
-[[bin]]
-name = "tutor-service"
  # Data serilization libaray 
  serde = {version = "*",features = ["derive"]}
 
  # Other utilities
  chrono = {version = "*",features =["serde"]}
+serde_struct_wrapper = "0.3.2"
+[[bin]]
+name = "basic-server"
+[[bin]]
+name = "tutor-service"

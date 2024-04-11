@@ -1,8 +1,10 @@
-use std::fmt::format;
+//use std::fmt::format;
 
 use super::state::AppState;
 use actix_web::{web,HttpResponse};
 
+use super::models::Course;
+use chrono::Utc;
 
 pub async fn health_check_handler(app_state :web::Data<AppState>) ->
  HttpResponse {
@@ -14,3 +16,52 @@ pub async fn health_check_handler(app_state :web::Data<AppState>) ->
     HttpResponse::Ok ().json(&response)
 
  }
+
+ pub async fn new_courses (
+    new_course:web::Json<Course>,
+    app_state:web::Data<AppState>,
+     ) -> HttpResponse {
+        println!("Received new course");
+        let course_count_for_user=app_state
+        .course
+        .lock()
+        .unwrap()
+        .clone()
+        .into_iter()
+        .filter(|course|course.tutor_id ==new_course.tutor_id)
+        .count();
+        
+        let new_course = Course {
+            tutor_id: new_course.tutor_id,
+            course_id: Some ((course_count_for_user +1).try_into ().unwrap()),
+            posted_time:Some(Utc::now().naive_utc()),
+            course_name:new_course.course_name.clone(),
+        };
+        app_state.course.lock().unwrap().push(new_course);
+        HttpResponse::Ok().json("Added course")
+    }
+
+    #[cfg(test)]
+     mod test {
+        use super::*;
+        use actix_web::http::StatusCode;
+        use std::sync::Mutex;
+
+         #[actix_web::test]
+
+         async fn post_course_test(){
+            let course =web::Json (Course{
+                tutor_id:1, 
+                course_name:"Hello , this is a test course ".into(),
+                course_id: None,
+                posted_time:None,
+            });
+            let app_state:web::Data<AppState>=web::Data::new(AppState{
+                health_check_response: "".to_string(),
+                visit_count:Mutex::new(0),
+                course:Mutex::new(vec![]),
+            });           
+                let resp = new_courses(course,app_state).await;
+                assert_eq!(resp.status(),StatusCode::OK);
+         }
+     }
