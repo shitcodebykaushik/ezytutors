@@ -3,7 +3,7 @@ use std::io;
 
 
 // configure route <1>
-pub fn general_routes (cg: &mut web::ServiceConfig) {
+pub fn general_routes (cfg: &mut web::ServiceConfig) {
     cfg.route("/health",web::get().to (health_check_handler));
 
 }
