@@ -1,0 +1,12 @@
+[package]
+name = "tutor-nodb"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web ="*"
+actix-rt ="*"
+
+
+[[bin]]
+name = "basic-server"
