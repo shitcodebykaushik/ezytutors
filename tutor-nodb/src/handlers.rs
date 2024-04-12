@@ -1,5 +1,6 @@
-//use std::fmt::format;
-#[warn(unused_imports)]
+
+use std::fmt::format;
+
 use std::{ clone};
 use std::sync::Mutex;
 
@@ -46,9 +47,9 @@ pub async fn health_check_handler(app_state :web::Data<AppState>) ->
 
     pub async fn get_courses_for_tutor(
         app_state: web::Data<AppState>,
-        params: web::Path<i32>,
+        params: web::Path<(i32)>,
     ) -> HttpResponse {
-        let tutor_id: i32 = params.0;
+        let tutor_id: i32=params .0;
     
         let filtered_courses = app_state
             .courses
