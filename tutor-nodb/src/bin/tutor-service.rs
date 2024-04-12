@@ -17,7 +17,7 @@ async fn main() -> io::Result<()> {
     let shared_data = web::Data::new(AppState {
         health_check_response: "I'm good. You've already asked me ".to_string(),
         visit_count: Mutex::new(0),
-        course: Mutex::new(vec![]),
+        courses: Mutex::new(vec![]),
     });
     let app = move || {
         App::new()
